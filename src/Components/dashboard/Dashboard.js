@@ -7,6 +7,7 @@ class Dashboard extends React.Component{
     render(){
         if(this.props.user==null){
             this.props.history.push("/login");
+            return null;
         }
         return      <div id="dashboard">
         <div className="jumbotron jumbotron-fluid">
