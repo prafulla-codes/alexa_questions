@@ -64,7 +64,13 @@ class Register extends React.Component{
                    firebaseDb.auth().createUserWithEmailAndPassword(email,password).then(()=>{
                        console.log(firebaseDb.auth().currentUser.email+"is has now signed up")
                        alert("Thank you for signing up");
-                       document.location.href="/";
+                       firebaseDb.firestore().collection("data").doc(firebaseDb.auth().currentUser.email).set({
+                           userEmail:firebaseDb.auth().currentUser.email,
+                           questions:[],
+                       }).then(()=>{
+                           document.location.href="/"
+                       }).catch(err=>alert(err.message))
+                     
                    }).catch(err=>{
                        alert(err.message)
                    })
