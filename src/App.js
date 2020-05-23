@@ -1,12 +1,12 @@
 import React from 'react';
+import Login from './Components/authentication/Login';
 
-import Contacts from './Components/Contacts';
 
 function App() {
   return (
     <div className="row">
       <div className="col-md-8 offset-md-2">
-        <Contacts />
+        <Login/>
       </div>
     </div>
   );
