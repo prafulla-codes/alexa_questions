@@ -9,6 +9,9 @@ import { AuthProvider } from './Auth';
 class App extends React.Component {
   constructor(props){
     super(props);
+    this.state={
+      "user":JSON.parse(localStorage.getItem("auth")),
+    }
   }
   changeUser = (user)=>{
     this.setState({user:user});
@@ -17,8 +20,8 @@ class App extends React.Component {
 
       return <Router>
       <Route exact path="/login" render={props=> <Login {...props} changeUser={this.changeUser}/>}></Route>
-      <Route exact path="/register" component={Register}></Route>
-      <Route exact path="/" component={Dashboard}></Route>
+      <Route exact path="/register" render={props=> <Register {...props} />}></Route>
+      <Route exact path="/" render={props=><Dashboard {...props} user={this.state.user}/>}></Route>
     </Router>
     
 

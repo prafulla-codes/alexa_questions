@@ -53,7 +53,7 @@ class Login extends React.Component{
                         Login
                     </Button>
                     <Link to="/register">
-                    <Button id="signUpButton" variant="success" type="submit">
+                    <Button id="signUpButton" variant="success" >
                         Sign up
                     </Button>
                     </Link>
@@ -76,6 +76,7 @@ class Login extends React.Component{
                let currentUser = firebaseDb.auth().currentUser
                this.props.changeUser(currentUser);
                this.props.history.push("/");
+               localStorage.setItem("auth",JSON.stringify(currentUser));
             }).catch(err=>{
 
                 console.log(err);
