@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import firebaseDb from '../../firebase';
 import {
     BrowserRouter as Router,
     Switch,
@@ -20,20 +21,20 @@ class Register extends React.Component{
                         <Form>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
+                            <Form.Control id="email" type="email" placeholder="Enter email" required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" />
+                            <Form.Control id="password" type="password" placeholder="Password" required/>
                         </Form.Group>
 
                         <Form.Group controlId="formConfirmPassword">
                             <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control type="password" placeholder="Confirm Password" />
+                            <Form.Control id="confirmPassword" type="password" placeholder="Confirm Password" required />
                         </Form.Group>
 
-                        <Button id="registerButton" variant="primary" type="submit">
+                        <Button id="registerButton" variant="primary">
                             Register
                         </Button>
                
@@ -44,6 +45,40 @@ class Register extends React.Component{
                     </Route>
                 </Switch>
         </Router>
+    }
+    componentDidMount(){
+        document.getElementById("registerButton").addEventListener("click",()=>{
+           console.log("clicked");
+           let email = document.getElementById("email").value;
+           let password = document.getElementById("password").value;
+           let confirmPassword = document.getElementById("confirmPassword").value;
+           if(confirmPassword=='' || password=='')
+           {
+               return;
+           }
+           if(this.validateEmail(email))
+           {
+               if(password==confirmPassword)
+               {
+                   console.log("[Alexa Questions] Authenticating..")
+                   firebaseDb.auth().createUserWithEmailAndPassword(email,password).then(()=>{
+                       console.log(firebaseDb.auth().currentUser.email+"is has now signed up")
+                       alert("Thank you for signing up");
+                       document.location.href="/";
+                   }).catch(err=>{
+                       alert(err.message)
+                   })
+               }
+               else
+               {
+                   alert("Passwords Do Not Match");
+               }
+           }
+        })
+    }
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     }
 }
 export default Register;
