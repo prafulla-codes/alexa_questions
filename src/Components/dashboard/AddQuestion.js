@@ -41,7 +41,7 @@ class AddQuestion extends React.Component{
                 <Form.Label>Answer</Form.Label>
                 <Form.Control id="answer" type="number" min="1" max="4" />
             </Form.Group>
-            <Button id="addQuestion" variant="primary" autoSave="false">
+            <Button  controlId="addQuestion" id="addQuestion" variant="primary" autoSave="false">
                 Add Question
             </Button>
          

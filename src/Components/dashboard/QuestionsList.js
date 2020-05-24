@@ -1,11 +1,18 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ReactDOM from 'react-dom';
+import * as firebase from 'firebase';
 import firebaseDb from '../../firebase';
 import {BrowserRouter as Router,Link,Route,Switch} from 'react-router-dom';
 import './QuestionList.css';
 class QuestionsList extends React.Component{
+    constructor(props){
+        super(props);
+        this.deleteQuestion = this.deleteQuestion.bind(this);
+    }
     render(){
+   
         if(this.props.user!=null)
         {
             return  <div className="jumbotron jumbotron-fluid">
@@ -32,32 +39,52 @@ class QuestionsList extends React.Component{
             }
     
     }
+
+    deleteQuestion(questions,index){
+        firebaseDb.firestore().collection('data').doc(this.props.user.email).update({
+          questions:questions.filter((question,i)=>i!=index)
+        }).then(()=>{
+            document.getElementById(`question${index+1}`).remove();
+        }).catch(err=>alert(err.message));
+    }
     componentDidMount(){
         if(this.props.user!=null)
         {
+          
             document.getElementById("logoutButton").addEventListener('click',()=>{
                 localStorage.removeItem("auth");
                 this.props.changeUser(null);
             })
+         
             let userData = firebaseDb.firestore().collection('data').doc(`${this.props.user.email}`);
             userData.get().then((querySnapshot)=>{
                 let data = querySnapshot.data();
                 console.log(data);
-                data.questions.forEach(question=>{
-                    let q = document.createElement('div');
-                    q.setAttribute('class','card');
-                    q.innerHTML=`
-                    <div class="card-body">
-                    <h5 class="card-title">${question.text}</h5>
-                    <p class="${0==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[0]} </p>
-                    <p class="${1==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[1]} </p>
-                    <p class="${2==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[2]} </p>
-                    <p class="${3==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[3]} </p>
+                ReactDOM.render(
+                    data.questions.map((question,index)=>{
+                    return <div className="card" id={`question${index+1}`} style={{width:'80%',marginBottom:'15px'}}>
+                    <div className="card-body">
+                    <h5 className="card-title">{question.text}</h5>
+                       {question.options.map((option,index)=>{
+                           if(index==question.answer-1)
+                           {
+                            return <p key={option}  className="card-text correct"> {option}</p>
+                           }
+                           else
+                           {
+                            return <p key={option}  className="card-text"> {option}</p>
+                           }
+                       })}
+                    </div>
+                    <button className="btn btn-danger" style={{width:'5rem',marginLeft:'15px',marginTop:'0.5rem',marginBottom:'0.5rem'}} onClick={()=>{this.deleteQuestion(data.questions,index)}}>Delete</button>
+
                   </div>
-                    `
-                    document.getElementById("questions_container").appendChild(q)
-                })
+                    }),document.getElementById('questions_container')
+                );
+               
             }).catch(err=>console.log(err))
+
+       
         }
   
     }
