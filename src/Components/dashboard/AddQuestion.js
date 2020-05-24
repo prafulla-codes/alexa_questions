@@ -12,7 +12,7 @@ class AddQuestion extends React.Component{
     render(){
         if(this.props.user!=null)
         {
-            return   <div id="addQuestion" className="container">
+            return   <div id="addQuestionDiv" className="container">
             <a href="/questionslist"><h4 id="questions_link">Questions List</h4></a>
             <Form>
             <h4>Add A Question</h4>
@@ -37,11 +37,12 @@ class AddQuestion extends React.Component{
                 <Form.Label>Option 4</Form.Label>
                 <Form.Control id="option4" type="text" />
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
+        <Form.Group controlId="formBasicAnswer">
                 <Form.Label>Answer</Form.Label>
-                <Form.Control id="answer" type="number" min="1" max="4" />
+                <Form.Control id="answer" type="number" min="1" max="4" default="1" />
             </Form.Group>
-            <Button  controlId="addQuestion" id="addQuestion" variant="primary" autoSave="false">
+
+            <Button  controlId="addQuestion" onBlur="" id="addQuestion" variant="primary" type="button">
                 Add Question
             </Button>
          
@@ -64,6 +65,7 @@ class AddQuestion extends React.Component{
             })
 
             document.getElementById("addQuestion").addEventListener("click",(e)=>{
+                console.log('clicked')
                 e.preventDefault();
                 let question = document.getElementById("question").value;
                 let option1 = document.getElementById("option1").value;

@@ -60,7 +60,7 @@ class Register extends React.Component{
            {
                if(password==confirmPassword)
                {
-                   console.log("[Alexa Questions] Authenticating..")
+                   console.log("[Educational Quiz] Authenticating..")
                    firebaseDb.auth().createUserWithEmailAndPassword(email,password).then(()=>{
                        console.log(firebaseDb.auth().currentUser.email+"is has now signed up")
                        alert("Thank you for signing up");
