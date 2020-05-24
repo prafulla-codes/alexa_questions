@@ -1,5 +1,6 @@
 import React from 'react';
 import firebaseDb from '../../firebase';
+import { withRouter } from "react-router-dom";
 
 import './Dashboard.css';
 import {BrowserRouter as Router,Route,Link, Switch} from 'react-router-dom';
@@ -13,9 +14,9 @@ class Dashboard extends React.Component{
         }
         else
         {
-            return  <Router>
-            <div id="dashboard">
-            <button id="logoutButton" class="btn btn-primary">
+            return  <div id="dashboard">
+            <Router>
+            <button id="logoutButton" className="btn btn-primary">
                     Logout
                 </button>
             <div className="jumbotron jumbotron-fluid">
@@ -32,11 +33,9 @@ class Dashboard extends React.Component{
 
             </Switch>
             </div>
+            </Router>
             </div>
-        </Router>
-          
-
-        
+             
         }
        
     }
@@ -44,12 +43,11 @@ class Dashboard extends React.Component{
         if(this.props.user!=null)
         {
             document.getElementById("logoutButton").addEventListener('click',()=>{
-                this.props.changeUser(null);
                 localStorage.removeItem("auth");
-                
+                this.props.changeUser(null);
             })
         }
   
     }
 }
-export default Dashboard;
+export default withRouter(Dashboard);

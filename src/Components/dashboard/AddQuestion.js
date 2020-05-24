@@ -1,26 +1,19 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import * as firebase from 'firebase';
+import { withRouter } from "react-router-dom";
+
 import {BrowserRouter as Router,Link,Route,Switch} from 'react-router-dom';
 import QuestionsList from './QuestionsList';
 import firebaseDb from '../../firebase';
+import Dashboard from './Dashboard';
 class AddQuestion extends React.Component{
     render(){
         if(this.props.user!=null)
         {
-            return   <div id="addQuestion" class="container">
-                <Router>
-                    <Switch>
-                    <Link to="/questionslist" target="_self">
-                        <div class="container">
-                        <h4> Questions List</h4>
-                        <br></br>
-                        <br></br>
-                        </div>
-                    </Link>
-                    </Switch>
-                </Router>
+            return   <div id="addQuestion" className="container">
+            <a href="/questionslist"><h4 id="questions_link">Questions List</h4></a>
             <Form>
             <h4>Add A Question</h4>
             <Form.Group controlId="formBasicEmail">
@@ -48,7 +41,7 @@ class AddQuestion extends React.Component{
                 <Form.Label>Answer</Form.Label>
                 <Form.Control id="answer" type="number" min="1" max="4" />
             </Form.Group>
-            <Button id="addQuestion" variant="primary" autoSave={false}>
+            <Button id="addQuestion" variant="primary" autoSave="false">
                 Add Question
             </Button>
          
@@ -62,13 +55,12 @@ class AddQuestion extends React.Component{
     
     }
     componentDidMount(){
+        console.log(this.props.user);
         if(this.props.user!=null)
         {
             document.getElementById("logoutButton").addEventListener('click',()=>{
-                this.props.changeUser(null);
                 localStorage.removeItem("auth");
-                document.location.href="/";
-                
+                this.props.changeUser(null);
             })
 
             document.getElementById("addQuestion").addEventListener("click",(e)=>{
@@ -98,8 +90,10 @@ class AddQuestion extends React.Component{
                     }).catch(err=>alert(err.message))
                 }
             })
+            document.getElementById("questions_link").addEventListener("click",()=>{
+                document.location.href="/questionslist";
+            })         
         }
-  
     }
 }
-export default AddQuestion;
+export default withRouter(AddQuestion);

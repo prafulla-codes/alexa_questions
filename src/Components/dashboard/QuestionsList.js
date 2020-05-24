@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import firebaseDb from '../../firebase';
 import {BrowserRouter as Router,Link,Route,Switch} from 'react-router-dom';
-import './QuestionList.css'
+import './QuestionList.css';
 class QuestionsList extends React.Component{
     render(){
         if(this.props.user!=null)
@@ -36,9 +36,8 @@ class QuestionsList extends React.Component{
         if(this.props.user!=null)
         {
             document.getElementById("logoutButton").addEventListener('click',()=>{
-                this.props.changeUser(null);
                 localStorage.removeItem("auth");
-                document.location.href="/";
+                this.props.changeUser(null);
             })
             let userData = firebaseDb.firestore().collection('data').doc(`${this.props.user.email}`);
             userData.get().then((querySnapshot)=>{
@@ -50,10 +49,10 @@ class QuestionsList extends React.Component{
                     q.innerHTML=`
                     <div class="card-body">
                     <h5 class="card-title">${question.text}</h5>
-                    <p class="${0==Number(question.answer) ? 'correct' :''}"> ${question.options[0]} </p>
-                    <p class="${1==Number(question.answer) ? 'correct' :''}"> ${question.options[1]} </p>
-                    <p class="${2==Number(question.answer) ? 'correct' :''}"> ${question.options[2]} </p>
-                    <p class="${3==Number(question.answer) ? 'correct' :''}"> ${question.options[3]} </p>
+                    <p class="${0==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[0]} </p>
+                    <p class="${1==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[1]} </p>
+                    <p class="${2==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[2]} </p>
+                    <p class="${3==Number(question.answer)-1 ? 'correct' :''}"> ${question.options[3]} </p>
                   </div>
                     `
                     document.getElementById("questions_container").appendChild(q)

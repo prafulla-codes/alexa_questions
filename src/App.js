@@ -17,16 +17,16 @@ class App extends React.Component {
   }
   changeUser = (user)=>{
     this.setState({user:user});
+    document.location.href="/";
   }
   render(){
 
       return <Router>
+      <Route exact path="/questionslist" render={props=><QuestionsList {...props} changeUser={this.changeUser} user={this.state.user}/>}></Route>
       <Route exact path="/login" render={props=> <Login {...props} changeUser={this.changeUser}/>}></Route>
       <Route exact path="/register" render={props=> <Register {...props} />}></Route>
       <Route exact path="/" render={props=><Dashboard {...props} changeUser={this.changeUser} user={this.state.user}/>}></Route>
-      <Route exact path="/questionslist" render={props=><QuestionsList {...props} changeUser={this.changeUser} user={this.state.user}/>}></Route>
-
-    </Router>
+    </Router>;
   }
   componentDidMount(){
  
