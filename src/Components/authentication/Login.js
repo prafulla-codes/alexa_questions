@@ -36,7 +36,6 @@ class Login extends React.Component{
                         <div id="login">
                     <div className="jumbotron jumbotron-fluid">
                     <div className="container">
-                        <img id="logo" src={process.env.PUBLIC_URL+"/alexa.png"} alt="(Alexa Logo)"></img>
                     <h1 className="display-4 text-center">Educational Quiz</h1>
                     <Form>
                     <Form.Group controlId="formBasicEmail">

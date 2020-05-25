@@ -16,12 +16,19 @@ class Register extends React.Component{
                         <div id="register">
                         <div className="jumbotron jumbotron-fluid">
                         <div className="container">
-                            <img id="logo" src={process.env.PUBLIC_URL+"/alexa.png"} alt="(Alexa Logo)"></img>
                         <h1 className="display-4 text-center">Register</h1>
                         <Form>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control id="email" type="email" placeholder="Enter email" required/>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicFirstName">
+                            <Form.Label>Firstname</Form.Label>
+                            <Form.Control id="firstname" type="text" placeholder="Enter First Name" required/>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicLastName">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control id="lastname" type="text" placeholder="Enter Last Name" required/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicPassword">
@@ -52,8 +59,11 @@ class Register extends React.Component{
            let email = document.getElementById("email").value;
            let password = document.getElementById("password").value;
            let confirmPassword = document.getElementById("confirmPassword").value;
-           if(confirmPassword=='' || password=='')
+           let firstName = document.getElementById("firstname").value;
+           let lastName = document.getElementById("lastname").value;
+           if(confirmPassword=='' || password=='' || firstName=='' || lastName=='') 
            {
+               alert("Fields Cant Be Empty");
                return;
            }
            if(this.validateEmail(email))
@@ -66,6 +76,8 @@ class Register extends React.Component{
                        alert("Thank you for signing up");
                        firebaseDb.firestore().collection("data").doc(firebaseDb.auth().currentUser.email).set({
                            userEmail:firebaseDb.auth().currentUser.email,
+                           firstName:firstName,
+                           lastName:lastName,
                            questions:[],
                        }).then(()=>{
                            document.location.href="/"

@@ -7,6 +7,16 @@ import {BrowserRouter as Router,Route,Link, Switch} from 'react-router-dom';
 import AddQuestion from './AddQuestion';
 import QuestionsList from './QuestionsList';
 class Dashboard extends React.Component{
+
+     fetchName(){
+        console.log(`getName Called`)
+
+     }
+
+     returnName(name){
+         return name;
+     }
+
     render(){
         if(this.props.user==null){
             this.props.history.push("/login");
@@ -14,6 +24,7 @@ class Dashboard extends React.Component{
         }
         else
         {
+          
             return  <div id="dashboard">
             <Router>
             <button id="logoutButton" className="btn btn-primary">
@@ -21,7 +32,7 @@ class Dashboard extends React.Component{
                 </button>
             <div className="jumbotron jumbotron-fluid">
             <div className="container ">
-            <h4 className="text-center">Welcome {this.props.user.email.split('@')[0]} </h4>
+        <h4 className="text-center" id="welcomeText"></h4>
             </div>
             <Switch>
                 <Route path="/" exact>
@@ -45,6 +56,17 @@ class Dashboard extends React.Component{
             document.getElementById("logoutButton").addEventListener('click',()=>{
                 localStorage.removeItem("auth");
                 this.props.changeUser(null);
+            })
+
+            let userData = firebaseDb.firestore().collection('data').doc(`${this.props.user.email}`);
+            let firstName,lastName;
+            userData.get().then((snapshot)=>{
+                let data = snapshot.data();
+                firstName = data.firstName;
+                lastName = data.lastName;
+                console.log(`${firstName} ${lastName}`)
+                this.returnName(`${firstName} ${lastName}`);
+                document.getElementById("welcomeText").innerHTML=`Welcome ${firstName} ${lastName}`;
             })
         }
   

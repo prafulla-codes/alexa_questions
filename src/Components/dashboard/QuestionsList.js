@@ -18,7 +18,7 @@ class QuestionsList extends React.Component{
             return  <div className="jumbotron jumbotron-fluid">
                 <button id="logoutButton" class="btn btn-primary">Logout</button>
                         <div className="container">
-                        <h4 className="text-center">Welcome {this.props.user.email.split('@')[0]} </h4>
+                        <h4 className="text-center" id="welcomeText"></h4>
                        
 
                         <Link to="/" target="_parent">
@@ -50,7 +50,8 @@ class QuestionsList extends React.Component{
     componentDidMount(){
         if(this.props.user!=null)
         {
-          
+            let firstName,lastName;
+     
             document.getElementById("logoutButton").addEventListener('click',()=>{
                 localStorage.removeItem("auth");
                 this.props.changeUser(null);
@@ -60,19 +61,22 @@ class QuestionsList extends React.Component{
             userData.get().then((querySnapshot)=>{
                 let data = querySnapshot.data();
                 console.log(data);
+                firstName = data.firstName;
+                lastName = data.lastName;
+                document.getElementById("welcomeText").innerHTML=`Welcome ${firstName} ${lastName}`;
                 ReactDOM.render(
                     data.questions.map((question,index)=>{
                     return <div className="card" id={`question${index+1}`} style={{width:'80%',marginBottom:'15px'}}>
                     <div className="card-body">
-                    <h5 className="card-title">{question.text}</h5>
+                    <h5 className="card-title"> Q{index+1} {question.text}</h5>
                        {question.options.map((option,index)=>{
                            if(index==question.answer-1)
                            {
-                            return <p key={option}  className="card-text correct"> {option}</p>
+                            return <p key={option}  className="card-text correct"> Option {index+1} - {option}</p>
                            }
                            else
                            {
-                            return <p key={option}  className="card-text"> {option}</p>
+                            return <p key={option}  className="card-text"> Option {index+1} - {option}</p>
                            }
                        })}
                     </div>
